@@ -12,7 +12,6 @@ Sakura Macaron visual pack for [Pi](https://pi.dev).
 | **Header** | Sakura→sky cyberdeck startup art |
 | **Matrix** | Pastel digital rain while working (optional; can conflict with shimmer) |
 | **Zentui** | Editor, prompt rails, Starship footer, fixed bottom editor |
-| **Dual-quota** | Codex + Grok remaining chips in the footer |
 | **Claude shimmer** | Working spinner with macaron sweep + effort HUD |
 
 ## Look (v1.1)
@@ -20,13 +19,12 @@ Sakura Macaron visual pack for [Pi](https://pi.dev).
 **Footer**
 
 ```text
-󰀵  project  on 󰘬 main   Codex ▕░·····▏  0% · in 1d · Grok ▕██····▏ 36% · in 5d   [███░░░░░░░] 4%/2m  $0.06
+󰀵  project  on 󰘬 main   [███░░░░░░░] 4%/2m  $0.06
 ```
 
 - Context bar: truecolor macaron gauge; label **sky** (not mint green)
 - Cost: **peach**
 - Separators / cwd / os: soft sakura gradient accents
-- Dual-quota: identity tints + `· in Nd` reset text
 
 **Working line**
 
@@ -118,7 +116,6 @@ Recommended companion settings (optional, user-owned):
 /zentui                         editor/footer settings
 /sakura-matrix                 rain status
 /sakura-matrix on|off
-/dual-usage                    refresh Codex+Grok quotas
 ```
 
 ## Conflicts
@@ -173,4 +170,4 @@ Avoid stacking with `pi-zentui`, `pi-powerline-footer`, `@tifan/pi-fixed-editor`
 
 ## License
 
-MIT. Bundled dual-quota is original to this pack. Claude shimmer is a sakura-themed fork of [pi-claude-shimmer](https://github.com/ouzhenkun/pi-claude-shimmer) (MIT).
+MIT. Claude shimmer is a sakura-themed fork of [pi-claude-shimmer](https://github.com/ouzhenkun/pi-claude-shimmer) (MIT).
