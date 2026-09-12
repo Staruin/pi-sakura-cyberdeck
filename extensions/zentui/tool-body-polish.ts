@@ -9,13 +9,13 @@ export type ThemeLike = {
 };
 
 const RESET = "\x1b[0m";
-const CORAL: RGB = [255, 143, 163];
-const MINT: RGB = [174, 229, 197];
-const LAVENDER: RGB = [199, 184, 245];
-const SKY: RGB = [159, 211, 242];
-const MUTED: RGB = [169, 155, 174];
-const DIM_RGB: RGB = [113, 104, 121];
-const SAKURA: RGB = [242, 167, 198];
+const CORAL: RGB = [232, 99, 127];
+const MINT: RGB = [143, 224, 188];
+const LAVENDER: RGB = [159, 134, 232];
+const SKY: RGB = [148, 169, 240];
+const MUTED: RGB = [167, 155, 184];
+const DIM_RGB: RGB = [110, 103, 120];
+const SAKURA: RGB = [183, 156, 240];
 
 export function fg(color: RGB, text: string): string {
 	return `\x1b[38;2;${color[0]};${color[1]};${color[2]}m${text}${RESET}`;
@@ -152,7 +152,7 @@ function styleToolTitle(plain: string, theme?: ThemeLike): string | null {
 	// No leading glyph — border already has status chrome; keep body consistent.
 	const title = renderSakuraGradient(rawName);
 	if (!rest) return title;
-	// Path in sakura so it matches repeated path lines below (same content, same color).
+	// Path in violet so it matches repeated path lines below (same content, same color).
 	return `${title}  ${themeOr(theme, "accent", SAKURA, rest)}`;
 }
 
@@ -208,7 +208,7 @@ function looksLikePathLine(plain: string): boolean {
 
 function stylePathLine(plain: string, theme?: ThemeLike): string {
 	const s = plain.trim();
-	// Leading glyph + sakura path so sibling lines match the title row accent.
+	// Leading glyph + violet path so sibling lines match the title row accent.
 	return `${themeOr(theme, "dim", DIM_RGB, "›")} ${themeOr(theme, "accent", SAKURA, s)}`;
 }
 

@@ -24,12 +24,12 @@ type AssistantMessageLike = {
 /**
  * Hybrid thinking chrome:
  * - Claude: no full-width card, dim+italic body, quiet collapse
- * - Sakura: gradient ✦ / ◇ / THINKING label, tree rails, soft body tint
+ * - Violet: gradient ✦ / ◇ / THINKING label, tree rails, soft body tint
  * - User request: tree rails ├─ / │ / ╰─
  */
 const MAX_BODY_WIDTH = 100;
 const MAX_PREVIEW_LINES = 16;
-const BODY_TINT: RGB = [216, 202, 220]; // soft petal-lilac body
+const BODY_TINT: RGB = [212, 203, 222]; // soft lilac body
 const HIDDEN_LABEL_PLAIN = "✦ Thought";
 
 function stripAnsi(line: string): string {

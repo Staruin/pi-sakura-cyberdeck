@@ -2,13 +2,15 @@ import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 
 export type RGB = readonly [number, number, number];
 
+// NOTE: the sentinel *value* stays "sakura-macaron-gradient" on purpose — it is a
+// user-facing config value (zentui.json → editorBorder) and must not churn.
 export const SAKURA_MACARON_GRADIENT = "sakura-macaron-gradient";
 export const SAKURA_MACARON_STOPS: readonly RGB[] = [
-	[242, 167, 198], // sakura pink  #F2A7C6
-	[252, 201, 185], // sakura-iro   #FCC9B9
-	[239, 195, 230], // petal        #EFC3E6
-	[199, 184, 245], // lavender     #C7B8F5
-	[159, 211, 242], // sky macaron  #9FD3F2
+	[183, 156, 240], // violet  #B79CF0
+	[201, 174, 245], // violet-iro   #C9AEF5
+	[216, 194, 245], // lilac        #D8C2F5
+	[159, 134, 232], // lavender     #9F86E8
+	[148, 169, 240], // periwinkle  #94A9F0
 ];
 
 const RESET = "\x1b[0m";
@@ -36,14 +38,14 @@ export function pulsePhase(now = Date.now(), periodMs = FOOTER_PULSE_PERIOD_MS):
 export function sampleSakuraGradient(position: number, phase = 0): RGB {
 	const stops = SAKURA_MACARON_STOPS;
 	// Keep phase shimmer as a true 0..1 wrap; bare position=1 must hit the last stop
-	// (do not use `1 % 1 === 0`, which snapped the right edge back to sakura).
+	// (do not use `1 % 1 === 0`, which snapped the right edge back to violet).
 	let normalized = Math.max(0, Math.min(1, position));
 	if (phase !== 0) {
 		normalized = ((normalized + phase) % 1 + 1) % 1;
 	}
 	const scaled = normalized * (stops.length - 1);
 	const index = Math.min(stops.length - 2, Math.floor(scaled));
-	const from = stops[index] ?? SAKURA_MACARON_STOPS[0] ?? [242, 167, 198];
+	const from = stops[index] ?? SAKURA_MACARON_STOPS[0] ?? [183, 156, 240];
 	const to = stops[index + 1] ?? from;
 	return mix(from, to, scaled - index);
 }
@@ -59,7 +61,7 @@ function foreground(color: RGB, text: string): string {
 	return `\x1b[38;2;${color[0]};${color[1]};${color[2]}m${text}`;
 }
 
-/** Render Sakura → sky gradient. Optional phase shifts the stops for shimmer. */
+/** Render violet → periwinkle gradient. Optional phase shifts the stops for shimmer. */
 export function renderSakuraGradient(text: string, phase = 0): string {
 	const cacheKey = phase === 0 ? text : `${phase.toFixed(3)}|${text}`;
 	const cached = gradientCache.get(cacheKey);
@@ -80,8 +82,8 @@ export function renderSakuraGradient(text: string, phase = 0): string {
 }
 
 /**
- * Box-frame gradient: sakura at BOTH ends, macaron spectrum through the middle.
- * Avoids the linear L→R look where the right corner jumps to sky cyan.
+ * Box-frame gradient: violet at BOTH ends, macaron spectrum through the middle.
+ * Avoids the linear L→R look where the right corner jumps to periwinkle cyan.
  */
 export function renderSakuraFrameGradient(text: string): string {
 	const cacheKey = `frame|${text}`;
@@ -94,7 +96,7 @@ export function renderSakuraFrameGradient(text: string): string {
 		.map((char, index) => {
 			if (char === " ") return char;
 			const pos = index / span;
-			// 0 → 1 → 0 so left/right corners share sakura pink.
+			// 0 → 1 → 0 so left/right corners share violet.
 			const mirrored = pos <= 0.5 ? pos * 2 : (1 - pos) * 2;
 			return foreground(sampleSakuraGradient(mirrored), char);
 		})
@@ -106,7 +108,7 @@ export function renderSakuraFrameGradient(text: string): string {
 	return rendered;
 }
 
-/** Solid sakura stop — vertical rails / corners that must match the frame ends. */
+/** Solid violet stop — vertical rails / corners that must match the frame ends. */
 export function renderSakuraSolid(text: string, position = 0): string {
 	return rgbForeground(sampleSakuraGradient(position), text);
 }
@@ -116,21 +118,21 @@ export function renderSakuraSolid(text: string, position = 0): string {
 export type GaugeTier = "normal" | "warning" | "error";
 
 const GAUGE_STOPS: Record<GaugeTier, readonly RGB[]> = {
-	// healthy: sakura → peach → lavender → sky
+	// healthy: violet → apricot → lavender → periwinkle
 	normal: SAKURA_MACARON_STOPS,
-	// warning: stay warm (peach → butter). Do NOT end on sakura or it looks "healthy".
+	// warning: stay warm (apricot → butter). Do NOT end on violet or it looks "healthy".
 	warning: [
-		[252, 201, 185], // peach
-		[248, 210, 160],
-		[243, 217, 139], // butter
-		[230, 190, 100], // deeper butter
+		[201, 174, 245], // apricot
+		[240, 190, 130],
+		[233, 207, 126], // butter
+		[220, 180, 95], // deeper butter
 	],
-	// error: rose → coral only (no sakura pink start that confuses with normal)
+	// error: rose → rose only (no violet start that confuses with normal)
 	error: [
-		[255, 176, 196], // soft rose
-		[255, 160, 180],
-		[255, 143, 163], // coral
-		[232, 120, 150], // deeper rose
+		[245, 150, 170], // soft rose
+		[238, 130, 150],
+		[232, 99, 127], // rose
+		[205, 75, 105], // deeper rose
 	],
 };
 
@@ -141,7 +143,7 @@ function sampleStops(stops: readonly RGB[], position: number, phase = 0): RGB {
 			: (((Math.max(0, Math.min(1, position)) + phase) % 1) + 1) % 1;
 	const scaled = n * (stops.length - 1);
 	const index = Math.min(stops.length - 2, Math.floor(scaled));
-	const from = stops[index] ?? stops[0] ?? [242, 167, 198];
+	const from = stops[index] ?? stops[0] ?? [183, 156, 240];
 	const to = stops[index + 1] ?? from;
 	return mix(from, to, scaled - index);
 }
@@ -169,19 +171,19 @@ export function renderMacaronGauge(
 			let base: RGB;
 			if (tier === "warning") {
 				// solid butter — no pink end that looks "healthy" at high fill
-				base = [243, 217, 139];
+				base = [233, 207, 126];
 			} else if (tier === "error") {
-				base = [255, 143, 163]; // solid coral
+				base = [232, 99, 127]; // solid rose
 			} else {
 				const pos = cells <= 1 ? 0 : i / Math.max(1, filled - 1);
 				base = sampleStops(stops, pos, phase * 0.2);
 			}
 			const wave = 0.5 + 0.5 * Math.sin((i / cells + phase) * Math.PI * 2);
-			const lit = mix(base, [255, 252, 250], wave * 0.15);
+			const lit = mix(base, [253, 251, 255], wave * 0.15);
 			body.push(rgbForeground(lit, on));
 		} else {
 			// Soft track — not black-grey hole on light themes
-			body.push(`\x1b[38;2;180;168;184m${off}\x1b[39m`);
+			body.push(`\x1b[38;2;168;158;184m${off}\x1b[39m`);
 		}
 	}
 	const bar = body.join("");
@@ -200,7 +202,7 @@ export function renderGradientHairline(width: number, phase = 0, glyph = "━"):
 /** Dim / brighten an RGB by mixing toward black or white. */
 export function toneRgb(color: RGB, amount: number): RGB {
 	if (amount >= 0) return mix(color, [255, 255, 255], Math.min(1, amount));
-	return mix(color, [20, 16, 28], Math.min(1, -amount));
+	return mix(color, [19, 16, 25], Math.min(1, -amount));
 }
 
 /**

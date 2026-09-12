@@ -111,7 +111,7 @@ function fillLine(content: string, width: number): string {
 function renderPromptBoxRail(theme: Theme | undefined, config: PolishedTuiConfig): string {
 	if (config.features.copyFriendly) return "";
 	const railGlyph = config.icons.rail;
-	// Solid sakura rail — matches frame ends (not linear sky on the right).
+	// Solid violet rail — matches frame ends (not linear periwinkle on the right).
 	return `${renderSakuraSolid(railGlyph)} `;
 }
 

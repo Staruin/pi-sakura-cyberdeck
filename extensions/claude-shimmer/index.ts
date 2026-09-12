@@ -1,10 +1,10 @@
 /**
- * Sakura-macaron Claude-style spinner for pi.
+ * Violet-cyberdeck Claude-style spinner for pi.
  *
- * Same state machine as pi-claude-shimmer, recolored for sakura-macaron:
- * - Verb shimmer sweeps sakura → peach → lavender → sky highlight
+ * Same state machine as pi-claude-shimmer, recolored for violet-cyberdeck:
+ * - Verb shimmer sweeps violet → lilac → lavender → periwinkle highlight
  * - Thinking glow breathes lavender ↔ petal white
- * - Stall fades toward coral; tools flash mint/sakura
+ * - Stall fades toward rose; tools flash mint/violet
  * - Whimsical verbs lean "atelier / confection" (OpenCode + Claude vibe)
  */
 
@@ -14,9 +14,9 @@ import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-a
 
 type SpinnerMode = "requesting" | "thinking" | "responding" | "tool-input" | "tool-use";
 
-// ─── Verbs (Claude Code spinner verbs + sakura extras) ─────────────
+// ─── Verbs (Claude Code spinner verbs + violet extras) ─────────────
 
-// Claude Code SPINNER_VERBS (+ sakura extras) · 217 total
+// Claude Code SPINNER_VERBS (+ violet extras) · 217 total
 const VERBS = [
   "Accomplishing", "Actioning", "Actualizing", "Analyzing", "Architecting",
   "Baking", "Beaming", "Beboppin'", "Befuddling", "Billowing",
@@ -86,17 +86,17 @@ const SPINNER_FRAMES = [...GLYPHS, ...[...GLYPHS].reverse()];
 // ─── ANSI Colors ──────────────────────────────────────────────────
 
 const RESET = "\x1b[0m";
-// Sakura-macaron palette (truecolor, theme-aligned)
-const SAKURA: [number, number, number] = [242, 167, 198]; // #F2A7C6
-const PEACH: [number, number, number] = [252, 201, 185];  // #FCC9B9
-const PETAL: [number, number, number] = [239, 195, 230];  // #EFC3E6
-const LAVENDER: [number, number, number] = [199, 184, 245]; // #C7B8F5
-const SKY: [number, number, number] = [159, 211, 242];    // #9FD3F2
-const MINT: [number, number, number] = [174, 229, 197];   // #AEE5C5
-const CORAL: [number, number, number] = [255, 143, 163];  // #FF8FA3
-const MUTED: [number, number, number] = [169, 155, 174];  // #A99BAE
-const DIM_RGB: [number, number, number] = [113, 104, 121]; // #716879
-const HIGHLIGHT: [number, number, number] = [255, 248, 252]; // soft white petal
+// Violet-cyberdeck palette (truecolor, theme-aligned)
+const SAKURA: [number, number, number] = [183, 156, 240]; // #B79CF0
+const PEACH: [number, number, number] = [201, 174, 245];  // #C9AEF5
+const PETAL: [number, number, number] = [216, 194, 245];  // #D8C2F5
+const LAVENDER: [number, number, number] = [159, 134, 232]; // #9F86E8
+const SKY: [number, number, number] = [148, 169, 240];    // #94A9F0
+const MINT: [number, number, number] = [143, 224, 188];   // #8FE0BC
+const CORAL: [number, number, number] = [232, 99, 127];  // #E8637F
+const MUTED: [number, number, number] = [167, 155, 184];  // #A79BB8
+const DIM_RGB: [number, number, number] = [110, 103, 120]; // #6E6778
+const HIGHLIGHT: [number, number, number] = [248, 243, 255]; // soft white violet
 
 const ORANGE = `\x1b[38;2;${SAKURA[0]};${SAKURA[1]};${SAKURA[2]}m`; // spinner glyph tint
 const DIM = `\x1b[38;2;${MUTED[0]};${MUTED[1]};${MUTED[2]}m`;
@@ -255,7 +255,7 @@ function blend(
   ];
 }
 
-/** Sample fixed sakura → sky macaron stops (0..1). */
+/** Sample fixed violet → periwinkle stops (0..1). */
 function sampleMacaron(pos: number): [number, number, number] {
   const stops: [number, number, number][] = [SAKURA, PEACH, PETAL, LAVENDER, SKY];
   const n = Math.max(0, Math.min(1, pos));
@@ -265,7 +265,7 @@ function sampleMacaron(pos: number): [number, number, number] {
 }
 
 /**
- * Macaron color-sweep: base walk along sakura→sky, with a soft white bloom band.
+ * Macaron color-sweep: base walk along violet→periwinkle, with a soft white bloom band.
  * reverse = true sweeps right→left (working/thinking).
  */
 function colorSweep(
@@ -335,7 +335,7 @@ export default function (pi: ExtensionAPI) {
 
   /**
    * Pi ThinkingLevel: off | minimal | low | medium | high | xhigh | max
-   * Label + macaron color per tier (matches sakura-macaron thinking* theme tokens).
+   * Label + macaron color per tier (matches violet-cyberdeck thinking* theme tokens).
    */
   function getEffortInfo(): { tag: string; color: [number, number, number] } | undefined {
     try {
@@ -451,8 +451,8 @@ export default function (pi: ExtensionAPI) {
     const parts = buildStatusParts();
     const reverse = mode !== "requesting";
     // Kept as hex for stall blend path; colorSweep ignores them (uses macaron stops).
-    const baseHex = "#F2A7C6";
-    const shimmerHex = "#FFF8FC";
+    const baseHex = "#B79CF0";
+    const shimmerHex = "#F8F3FF";
     const stalled = _stallFrame > 0;
     // Live trailing dots so "Dusting" never looks frozen
     const dots = animatedDots(shimmerFrame);
@@ -461,7 +461,7 @@ export default function (pi: ExtensionAPI) {
     let verbText: string;
 
     if (mode === "tool-use") {
-      // Flash: sakura ↔ mint (tool busy) or coral when stalled
+      // Flash: violet ↔ mint (tool busy) or rose when stalled
       const flashOpacity = (Math.sin((shimmerFrame * SHIMMER_MS_WORKING / 1000) * Math.PI) + 1) / 2;
       if (stalled) {
         const stallT = _stallFrame / STALL_TRANSITION_FRAMES;

@@ -24,16 +24,14 @@ function gradient(text: string, from: RGB, to: RGB, bold = false): string {
   }).join("");
 }
 
-const ANIME_ART = [
-  "⠀⠀⠂⠈⣿⣷⣿⣿⣿⡅⡹⢿⠆⠙⠋⠉⠻⠿⣿⣿⣿⣿⣿⣿⣮⠻⣦⡙⢷⡑⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣌⠡⠌⠂⣙⠻⣛⠻⠷⠐⠈⠛⢱⣮⠁⠐⠀",
-  "⠀⠂⠈⣿⡇⢿⢹⣿⣶⠐⠁⠀⣀⣠⣤⠄⠀⠀⠈⠙⠻⣿⣿⣿⣦⣵⣌⠻⣷⢝⠦⠚⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⣻⣿⣊⡃⠀⣙⠿⣿⣿⣿⣎⢮⡀⢮⣽⠁⠐",
-  "⠂⠈⣿⣿⣧⡸⡎⡛⡩⠖⠀⣴⣿⣿⣿⠀⠀⠀⠀⠸⠇⠀⠙⢿⣿⣿⣿⣷⣌⢷⣑⢷⣄⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣫⠶⠛⠉⠀⠁⠀⠈⠈⠀⠠⠜⠻⣿⣆⢿⣼⣿⣿⠁",
-  " ⠈⣿⣿⣿⣧⢧⣧⢻⣦⢀⣹⣿⣿⣿⣇⠀⠄⠀⠀⠀⡀⠀⠈⢻⣿⣿⣿⣿⣷⣝⢦⡹⠷⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿⠈⠁⠀⠀⠀⠁⠀⠀⠀⠱⣶⣄⡀⠀⠈⠛⠜⣿⣿⣿⣿",
-  "⠀⠊⢫⣿⣏⣿⡌⣼⣄⢫⡌⣿⣿⣿⣿⣿⣦⡈⠲⣄⣤⣤⡡⢀⣠⣿⣿⣿⣿⣿⣿⣷⣼⣍⢬⣦⡙⣿⣿⣿⣿⣿⣯⢁⡄⠀⡀⡀⠀⠄⢈⣠⢪⠀⣿⣿⣿⣦⠀⢉⢂⠹⡿⣿⣿",
-  "⠀⠀⠄⢹⢃⢻⣟⠙⣿⣦⠱⢻⣿⣿⣿⣿⣿⣿⣷⣬⣍⣭⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⡙⢿⣼⡿⣿⣿⣿⣿⣿⣷⣄⠘⣱⢦⣤⡴⡿⢈⣼⣿⣿⣿⣇⣴⣶⣮⣅⢻⣿⡏",
-  "⠀⠀⠈⠹⣇⢡⢿⡆⠻⣿⣷⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣍⡻⣿⣟⣻⣿⣿⣿⣿⣷⣦⣥⣬⣤⣴⣾⣿⣿⣿⣿⣷⣿⣿⣿⣿⣷⡜⠃",
-  "⠀⠀⠀⢀⣘⠈⢂⠃⣧⡹⣿⣷⡄⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⣅⡙⢿⣟⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⡕⠂",
-  "⠀⠀⠀⠀⠀⠀⠛⢷⣜⢷⡌⠻⣿⣿⣦⣝⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣹⣷⣦⣹⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠉⠃⠀",
+// ANSI Shadow "PI" — keeps the startup block small and legible.
+const PI_ART = [
+  "██████╗ ██╗",
+  "██╔══██╗██║",
+  "██████╔╝██║",
+  "██╔═══╝ ██║",
+  "██║     ██║",
+  "╚═╝     ╚═╝",
 ] as const;
 
 function getAvailableRows(tui: unknown): number {
@@ -49,29 +47,29 @@ function getAvailableRows(tui: unknown): number {
 function renderHeader(width: number, availableRows = 0): string[] {
   if (width <= 0) return [];
 
-  const sakura: RGB = [242, 167, 198];
-  const peach: RGB = [252, 201, 185];
-  const lavender: RGB = [199, 184, 245];
-  const sky: RGB = [159, 211, 242];
-  const telemetry = "◈  SAKURA CYBERDECK  ◈";
-  const artWidth = Math.max(...ANIME_ART.map((line) => [...line].length));
+  const violet: RGB = [183, 156, 240];
+  const periwinkle: RGB = [148, 169, 240];
+  const lilac: RGB = [216, 194, 245];
+  const telemetry = "◈  PI CYBERDECK  ◈";
+  const artWidth = Math.max(...PI_ART.map((line) => [...line].length));
   const visibleArtWidth = Math.min(width, artWidth);
-  const artPad = " ".repeat(Math.max(0, Math.floor((width - visibleArtWidth) / 2) - 2));
-  // Keep the divider visually subordinate: inset it symmetrically from the artwork.
-  const railInset = visibleArtWidth >= 8 ? Math.max(2, Math.round(visibleArtWidth * 0.15)) : 0;
-  const railWidth = Math.max(1, visibleArtWidth - railInset * 2);
+  const telemetryWidth = [...telemetry].length;
+  // Artwork, divider and label share one width so the block reads as a single
+  // panel: never narrower than the artwork, never narrower than the label.
+  const railWidth = Math.max(1, Math.min(width, Math.max(visibleArtWidth, telemetryWidth)));
+  const artPad = " ".repeat(Math.max(0, Math.floor((width - visibleArtWidth) / 2)));
   const rail = "━".repeat(railWidth);
-  const railPad = " ".repeat(Math.max(0, Math.min(width - railWidth, Math.floor((width - railWidth) / 2) + 1)));
+  const railPad = " ".repeat(Math.max(0, Math.min(width - railWidth, Math.floor((width - railWidth) / 2))));
   const visibleTelemetry = [...telemetry].slice(0, width).join("");
-  const telemetryWidth = [...visibleTelemetry].length;
-  const telemetryPad = " ".repeat(Math.max(0, Math.min(width - telemetryWidth, Math.floor((width - telemetryWidth) / 2) + 1)));
+  const visibleTelemetryWidth = [...visibleTelemetry].length;
+  const telemetryPad = " ".repeat(Math.max(0, Math.min(width - visibleTelemetryWidth, Math.floor((width - visibleTelemetryWidth) / 2))));
 
-  const art = ANIME_ART.map((line) => {
+  const art = PI_ART.map((line) => {
     const clipped = [...line].slice(0, visibleArtWidth).join("");
-    return `${artPad}${gradient(clipped, sakura, sky)}`;
+    return `${artPad}${gradient(clipped, violet, periwinkle)}`;
   });
 
-  const visualHeight = ANIME_ART.length + 3; // artwork + gap + divider + label
+  const visualHeight = PI_ART.length + 3; // artwork + gap + divider + label
   const extraTopPadding = Math.max(0, Math.floor((availableRows - visualHeight) / 2) - 1);
 
   return [
@@ -79,13 +77,13 @@ function renderHeader(width: number, availableRows = 0): string[] {
     "",
     ...art,
     "",
-    `${railPad}${gradient(rail, sakura, sky)}`,
-    `${telemetryPad}${gradient(visibleTelemetry, lavender, peach, true)}`,
+    `${railPad}${gradient(rail, violet, periwinkle)}`,
+    `${telemetryPad}${gradient(visibleTelemetry, lilac, periwinkle, true)}`,
     "",
   ];
 }
 
-export default function sakuraCyberdeckHeader(pi: ExtensionAPI): void {
+export default function violetCyberdeckHeader(pi: ExtensionAPI): void {
   pi.on("session_start", (_event, ctx) => {
     if (!ctx.hasUI) return;
     ctx.ui.setHeader((tui) => ({

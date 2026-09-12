@@ -26,7 +26,7 @@ const SETTLED_CACHE_MAX_LINES = 80;
 const SETTLED_CACHE_MAX_CHARS = 64 * 1024;
 
 // Soft mint for bash rails (truecolor, theme-independent).
-const MINT = [174, 229, 197] as const;
+const MINT = [143, 224, 188] as const;
 
 type Cleanup = () => void;
 type ToolExecutionRuntime = {
@@ -81,23 +81,23 @@ function statusLabel(runtime: ToolExecutionRuntime, statsText: string): string {
 		: `✓ ${name}${deltaPart} · COMPLETE`;
 }
 
-// Status rail = theme semantic tokens from sakura-macaron.json (pastel, not traffic lights).
+// Status rail = theme semantic tokens from violet-cyberdeck.json (pastel, not traffic lights).
 // Design systems (MUI/Paste/Chakra) keep success/error/info roles; pastel decks soft-tint them.
 // This pack: success→mint, error→coral, info→sky (already in theme).
-const RAIL_WORKING: [number, number, number] = [159, 211, 242]; // sky  #9FD3F2 — in flight
-const RAIL_SUCCESS: [number, number, number] = [174, 229, 197]; // mint  #AEE5C5 — theme success
-const RAIL_ERROR: [number, number, number] = [255, 143, 163];   // coral #FF8FA3 — theme error (rose, not pure red)
+const RAIL_WORKING: [number, number, number] = [148, 169, 240]; // sky  #94A9F0 — in flight
+const RAIL_SUCCESS: [number, number, number] = [143, 224, 188]; // mint  #8FE0BC — theme success
+const RAIL_ERROR: [number, number, number] = [232, 99, 127];   // coral #E8637F — theme error (rose, not pure red)
 
 function leftRailFor(runtime: ToolExecutionRuntime, _theme: Theme): string {
 	const pending = runtime.isPartial !== false;
-	// Thick left bar: sky / mint / coral — Grok-style status, macaron hues.
+	// Thick left bar: periwinkle / mint / rose — Grok-style status, violet hues.
 	if (pending) return rgbForeground(RAIL_WORKING, "┃ ");
 	if (runtime.result?.isError) return rgbForeground(RAIL_ERROR, "┃ ");
 	return rgbForeground(RAIL_SUCCESS, "┃ ");
 }
 
 /**
- * Compact sakura status rail + modern body polish for tool rows.
+ * Compact violet status rail + modern body polish for tool rows.
  * Settled frames are cached so animation redraws stay cheap.
  */
 export function installToolExecutionStyle(getTheme: () => Theme | undefined): Cleanup {
@@ -219,7 +219,7 @@ export function installToolExecutionStyle(getTheme: () => Theme | undefined): Cl
 				const plain = plains[i] ?? "";
 				const trimmed = plain.trim();
 
-				// Top / bottom DynamicBorder → sakura gradient frame.
+				// Top / bottom DynamicBorder → violet gradient frame.
 				if (/^[╭┌╔].*[╮┐╗]$/.test(trimmed) || /^[─═]{3,}$/.test(trimmed)) {
 					const label = isRunning ? "◆ BASH · RUNNING" : "✓ BASH · COMPLETE";
 					out.push(renderSakuraFrameGradient(fitBorderLabel(label, width)));
@@ -233,7 +233,7 @@ export function installToolExecutionStyle(getTheme: () => Theme | undefined): Cl
 				// Command header: `$ cmd` → mint prompt.
 				const cmd = trimmed.match(/^\$\s+(.+)$/);
 				if (cmd) {
-					out.push(`${fg(MINT, "❯")} ${fg([159, 211, 242], cmd[1] ?? "")}`);
+					out.push(`${fg(MINT, "❯")} ${fg([148, 169, 240], cmd[1] ?? "")}`);
 					continue;
 				}
 
@@ -250,7 +250,7 @@ export function installToolExecutionStyle(getTheme: () => Theme | undefined): Cl
 				if (more > 0) {
 					return [
 						...head,
-						fg([113, 104, 121], `… +${more} lines`),
+						fg([110, 103, 120], `… +${more} lines`),
 						...tail,
 					];
 				}

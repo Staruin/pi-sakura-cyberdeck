@@ -1,12 +1,12 @@
-# Claude Shimmer Sakura (bundled)
+# Claude Shimmer Violet (bundled)
 
-Claude Code–style working spinner, recolored for sakura-macaron.
+Claude Code–style working spinner, recolored for violet-cyberdeck.
 
 ```text
 Whisking...  ( HIGH · ↓ 128 · 00:12 )
 ```
 
-- Verb shimmer: sakura→sky + soft white bloom
+- Verb shimmer: violet→periwinkle + soft white bloom
 - Fixed-width `...` dots (slow cycle)
 - Status HUD: `( EFFORT · ↓ N · mm:ss )` with ` · ` separators
 - Effort tiers: MINIMAL / LOW / MEDIUM / HIGH / XHIGH / MAX (tier colors)

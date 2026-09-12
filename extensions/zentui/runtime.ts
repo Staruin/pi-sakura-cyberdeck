@@ -511,7 +511,7 @@ const runtimes: RuntimeDef[] = [
 	{
 		name: "gleam",
 		symbol: "",
-		style: "bold #FFAFF3",
+		style: "bold #C9AEF5",
 		priority: PRIORITY_DEFAULT,
 		detect: { extensions: ["gleam"], files: ["gleam.toml"] },
 		version: versionFromCommands([{ command: "gleam", args: ["--version"] }]),

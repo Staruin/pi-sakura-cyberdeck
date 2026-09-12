@@ -1,7 +1,7 @@
 {
   "name": "pi-sakura-cyberdeck",
   "version": "1.1.5",
-  "description": "Sakura Macaron visual pack for Pi: theme, cyberdeck header, matrix rain, macaron Zentui chrome, Claude-style shimmer.",
+  "description": "Violet Cyberdeck visual pack for Pi: theme, cyberdeck header, matrix rain, violet Zentui chrome, Claude-style shimmer.",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "check": "node scripts/check.mjs",
+    "preview": "node scripts/preview.mjs",
     "pack:check": "npm pack --dry-run"
   },
   "peerDependencies": {
@@ -36,7 +37,7 @@
       "./extensions/claude-shimmer/index.ts"
     ],
     "themes": [
-      "./themes/sakura-macaron.json"
+      "./themes/violet-cyberdeck.json"
     ]
   }
 }

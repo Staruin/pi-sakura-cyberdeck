@@ -13,7 +13,7 @@ for (const path of [...manifest.pi.extensions, ...manifest.pi.themes]) {
   await access(resolve(root, path));
 }
 
-const theme = JSON.parse(await readFile(resolve(root, "themes/sakura-macaron.json"), "utf8"));
+const theme = JSON.parse(await readFile(resolve(root, "themes/violet-cyberdeck.json"), "utf8"));
 const requiredColors = [
   "accent", "border", "borderAccent", "borderMuted", "success", "error", "warning",
   "muted", "dim", "text", "thinkingText", "selectedBg", "userMessageBg",
@@ -27,8 +27,24 @@ const requiredColors = [
   "thinkingXhigh", "bashMode",
 ];
 
-assert.equal(theme.name, "sakura-macaron");
+assert.equal(theme.name, "violet-cyberdeck");
 for (const color of requiredColors) assert.ok(color in theme.colors, `missing theme color: ${color}`);
+
+// Palette guard: the fork ships a violet palette. Catch a stray pink/peach
+// literal sneaking back in — in the theme or anywhere in the extensions.
+const violetVars = ["violet", "lilac", "lavender", "periwinkle"];
+for (const name of violetVars) assert.ok(name in theme.vars, `missing theme var: ${name}`);
+assert.equal(theme.vars.violet, "#B79CF0");
+
+const bannedPink = ["#F2A7C6", "#FCC9B9", "#EFC3E6", "#F6BC9A", "#C7B8F5", "#9FD3F2", "#FF8FA3"];
+const themeSource = await readFile(resolve(root, "themes/violet-cyberdeck.json"), "utf8");
+for (const hex of bannedPink) {
+	assert.equal(themeSource.includes(hex), false, `pink palette literal ${hex} came back in the theme`);
+}
+
+// The editorBorder sentinel is a user-facing config value and must stay stable.
+const gradientSource = await readFile(resolve(root, "extensions/zentui/gradient.ts"), "utf8");
+assert.match(gradientSource, /SAKURA_MACARON_GRADIENT = "sakura-macaron-gradient"/);
 
 // Fixed-editor regression: when pinned cluster shrinks, rows above its new start
 // belong to transcript. paintCluster runs after transcript output and must not clear them.

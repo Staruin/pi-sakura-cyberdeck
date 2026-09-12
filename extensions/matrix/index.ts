@@ -7,15 +7,15 @@ const WIDGET_KEY = "sakura-matrix-engine";
 const CONFIG_PATH = join(homedir(), ".pi", "agent", "sakura-cyberdeck-matrix.json");
 const RESET = "\x1b[0m";
 const GLYPHS = [..."0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾗﾘﾙﾚﾛﾜﾝ"];
-const BG: RGB = [20, 17, 26];
-const TEXT: RGB = [247, 238, 248];
+const BG: RGB = [19, 16, 25];
+const TEXT: RGB = [243, 239, 248];
 const CANDY: readonly RGB[] = [
-  [242, 167, 198], // sakura
-  [252, 201, 185], // sakura-iro
-  [239, 195, 230], // petal
-  [199, 184, 245], // lavender
-  [159, 211, 242], // sky
-  [174, 229, 197], // mint
+  [183, 156, 240], // violet
+  [201, 174, 245], // violet-iro
+  [216, 194, 245], // lilac
+  [159, 134, 232], // lavender
+  [148, 169, 240], // periwinkle
+  [143, 224, 188], // mint
 ];
 const WORKING_INDICATOR = "◆";
 const PHASE_MESSAGES: Record<Phase, string> = {
@@ -99,7 +99,7 @@ function colorize(char: string, color: RGB, bold = false): string {
 }
 
 function workingIndicatorFrame(): string {
-  return colorize(WORKING_INDICATOR, CANDY[0] ?? [242, 167, 198], true);
+  return colorize(WORKING_INDICATOR, CANDY[0] ?? [183, 156, 240], true);
 }
 
 function stableGlyph(seed: number, row: number, timeSlice: number): string {
@@ -125,7 +125,7 @@ export function createDrops(width: number, density: number, height: number): Dro
       length,
       gap,
       seed: Math.floor(random() * 0x7fffffff) ^ (index * 7919),
-      color: CANDY[index % CANDY.length] ?? [242, 167, 198],
+      color: CANDY[index % CANDY.length] ?? [183, 156, 240],
     };
   });
 }
@@ -315,20 +315,20 @@ export default function sakuraMatrixExtension(pi: ExtensionAPI): void {
   pi.on("tool_execution_end", () => setPhase("working"));
 
   pi.registerCommand("sakura-matrix", {
-    description: "Sakura Matrix animation: status, on, off, preview, fps <8-18>, density <0.45-0.95>",
+    description: "Violet Matrix animation: status, on, off, preview, fps <8-18>, density <0.45-0.95>",
     handler: async (args, ctx) => {
       const [command = "status", value] = args.trim().toLowerCase().split(/\s+/);
       if (command === "on") {
         config.enabled = true;
         saveConfig(config);
-        ctx.ui.notify("Sakura Matrix enabled", "info");
+        ctx.ui.notify("Violet Matrix enabled", "info");
         return;
       }
       if (command === "off") {
         config.enabled = false;
         saveConfig(config);
         stop();
-        ctx.ui.notify("Sakura Matrix disabled", "info");
+        ctx.ui.notify("Violet Matrix disabled", "info");
         return;
       }
       if (command === "preview") {
@@ -338,7 +338,7 @@ export default function sakuraMatrixExtension(pi: ExtensionAPI): void {
           if (generation === previewToken) stop();
         }, 5000);
         previewTimer.unref?.();
-        ctx.ui.notify("Sakura Matrix preview: 5 seconds", "info");
+        ctx.ui.notify("Violet Matrix preview: 5 seconds", "info");
         return;
       }
       if (command === "fps") {
@@ -349,7 +349,7 @@ export default function sakuraMatrixExtension(pi: ExtensionAPI): void {
         }
         config.fps = Math.round(fps);
         saveConfig(config);
-        ctx.ui.notify(`Sakura Matrix FPS: ${config.fps}`, "info");
+        ctx.ui.notify(`Violet Matrix FPS: ${config.fps}`, "info");
         return;
       }
       if (command === "density") {
@@ -361,11 +361,11 @@ export default function sakuraMatrixExtension(pi: ExtensionAPI): void {
         config.density = Math.round(density * 100) / 100;
         dropsByWidth.clear();
         saveConfig(config);
-        ctx.ui.notify(`Sakura Matrix density: ${config.density}`, "info");
+        ctx.ui.notify(`Violet Matrix density: ${config.density}`, "info");
         return;
       }
       ctx.ui.notify(
-        `Sakura Matrix: ${config.enabled ? "on" : "off"} · ${config.fps} FPS · ${config.height} lines · density ${config.density}`,
+        `Violet Matrix: ${config.enabled ? "on" : "off"} · ${config.fps} FPS · ${config.height} lines · density ${config.density}`,
         "info",
       );
     },
